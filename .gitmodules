@@ -1,0 +1,8 @@
+[submodule "fairseq"]
+	path = fairseq
+	url = https://github.com/TheShadow29/fairseq.git
+	branch = fseq_master_13Oct20
+[submodule "coco-caption"]
+	path = coco-caption
+	url = https://github.com/TheShadow29/coco-caption.git
+	branch = master
