@@ -1,0 +1,5 @@
+temp_dir/
+tmp/
+*__pycache__/
+!data/README.md
+data/
