@@ -1,6 +1,6 @@
 # Data Preparation
 
-There are three main steps in setting up the dataset.
+There are three main steps in setting up the dataset. See [./data/README.md]('./data/README.md') for annotation file structure.
 
 1. Download the Annotation and Split Files
 ```
