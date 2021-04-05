@@ -40,20 +40,19 @@ class EvalB(nn.Module):
         mdl_out = mdl(inp)["mdl_out"]
         mdl_out_probs = F.softmax(mdl_out, dim=-1)
         mdl_probs_sorted, mdl_ixs_sorted = mdl_out_probs.sort(dim=-1, descending=True)
-        label_lst10 = inp["label_tensor10"]
+        # label_lst10 = inp["label_tensor10"]
         ann_lst = inp["vseg_idx"]
         topk_save = 5
 
-        def get_dct(pred_vbs, pred_scores, tgt_vbs10, ann_idx):
+        def get_dct(pred_vbs, pred_scores, ann_idx):
             pred_vbs_out = []
             pred_scores_out = []
-            tgt_vbs_out = []
             assert len(pred_vbs) == 5
             assert len(pred_scores) == 5
-            assert len(tgt_vbs10) == 5
+            # assert len(tgt_vbs10) == 5
 
             # iterate over Ev1-5
-            for pvb, pvs, tgtvb in zip(pred_vbs, pred_scores, tgt_vbs10):
+            for pvb, pvs in zip(pred_vbs, pred_scores):
                 pvb_used = pvb[:topk_save]
                 pvb_str = [self.comm.vb_id_vocab.symbols[pv] for pv in pvb_used]
                 pred_vbs_out.append(pvb_str)
@@ -61,23 +60,16 @@ class EvalB(nn.Module):
                 pvb_score = pvs[:topk_save]
                 pred_scores_out.append(pvb_score)
 
-                tgt_vb_str = [self.comm.vb_id_vocab.symbols[tgtv] for tgtv in tgtvb]
-                tgt_vbs_out.append(tgt_vb_str)
-
             return {
                 "pred_vbs_ev": pred_vbs_out,
                 "pred_scores_ev": pred_scores_out,
-                "tgt_vbs_ev": tgt_vbs_out,
                 "ann_idx": ann_idx,
             }
 
         out_dct_lst = [
-            get_dct(pred_vbs, pred_scores, tgt_vbs10, ann_idx)
-            for pred_vbs, pred_scores, tgt_vbs10, ann_idx in zip(
-                mdl_ixs_sorted.tolist(),
-                mdl_probs_sorted.tolist(),
-                label_lst10.tolist(),
-                ann_lst.tolist(),
+            get_dct(pred_vbs, pred_scores, ann_idx)
+            for pred_vbs, pred_scores, ann_idx in zip(
+                mdl_ixs_sorted.tolist(), mdl_probs_sorted.tolist(), ann_lst.tolist(),
             )
         ]
         return out_dct_lst
@@ -122,23 +114,15 @@ class EvalB(nn.Module):
             with open(fname, "wb") as f:
                 pickle.dump(curr_results, f)
             if self.full_cfg.only_test:
-                # spl = "test"
-                set_type = self.full_cfg.ds.val_set_type
                 task_type = self.full_cfg.task_type
-                if set_type == "subset100" or set_type == "full1800":
-                    spl = "test"
-                elif set_type == "lb":
-                    if task_type == "vb":
-                        spl = "test_verb"
-                    elif task_type == "vb_arg":
-                        spl = "test_srl"
-                    elif task_type == "evrel":
-                        spl = "test_evrel"
-                    else:
-                        raise NotImplementedError
+                if task_type == "vb":
+                    spl = "test_verb"
+                elif task_type == "vb_arg":
+                    spl = "test_srl"
+                elif task_type == "evrel":
+                    spl = "test_evrel"
                 else:
                     raise NotImplementedError
-
             else:
                 spl = "valid"
             out_acc = self.evl_fn(fname, split_type=spl)
@@ -147,7 +131,6 @@ class EvalB(nn.Module):
                 for k, v in out_acc.items()
                 if k in self.met_keys
             }
-            # return val_loss, val_acc
         synchronize()
         if is_main_process():
             if self.compute_loss:
@@ -190,22 +173,13 @@ class EvalB_Gen(EvalB):
 
         def conv_seq_to_srl(inp_seq: str, ann_idx):
             inp_tok_lst = inp_seq.split(" ")
-            # assert "." in inp_tok_lst[0]
             if "." not in inp_tok_lst[0]:
-                # import pdb
-
-                # pdb.set_trace()
                 print("Pain in Val", ann_idx)
-                # torch.save(mdl.state_dict(), "./cache/mdl_exited.pkl")
                 return {}
             vb = inp_tok_lst[0]
-            # assert inp_tok_lst[1] in self.comm.ag_name_dct.ag_dct_start.values()
-            # curr_arg_name_beg = inp_tok_lst[1]
-
             ix = 1
             vb_dct = {"vb_id": vb}
             curr_str_lst = []
-            # curr_arg_name = curr_arg_name_beg.split("<", 1)[1].rsplit(">", 1)[0]
             curr_arg_name = ""
             while ix < len(inp_tok_lst):
                 if inp_tok_lst[ix] not in self.comm.ag_name_dct.ag_dct_start.values():
@@ -243,7 +217,7 @@ class EvalB_Gen(EvalB):
 
 class EvalB_Acc(EvalB):
     def after_init(self):
-        self.met_keys = ["Macro_Top_Dct", "Top_1"]
+        self.met_keys = ["Macro_Top_1", "Top_1"]
         self.evl_met = EvlFn_EvRel(self.cfg, self.comm, self.met_keys)
         self.evl_fn = self.evl_met.simple_acc_evrel
         self.compute_loss = True
@@ -253,20 +227,17 @@ class EvalB_Acc(EvalB):
         mdl_out = mdl(inp)["mdl_out"]
         mdl_out_probs = F.softmax(mdl_out, dim=-1)
         mdl_probs_sorted, mdl_ixs_sorted = mdl_out_probs.sort(dim=-1, descending=True)
-        label_lst10 = inp["evrel_labs"]
         ann_lst = inp["vseg_idx"]
 
-        def get_dct(pred_vbs, pred_scores, tgt_vbs10, ann_idx):
+        def get_dct(pred_vbs, pred_scores, ann_idx):
             pred_vbs_out = []
             pred_scores_out = []
-            tgt_vbs_out = []
 
             assert len(pred_vbs) == 4
             assert len(pred_scores) == 4
-            assert len(tgt_vbs10) == 4
 
             # iterate over Ev1-5
-            for pvb, pvs, tgtvb in zip(pred_vbs, pred_scores, tgt_vbs10):
+            for pvb, pvs in zip(pred_vbs, pred_scores):
 
                 pvb_used = [pvb_i[0] for pvb_i in pvb]
                 pvb_str = [self.comm.evrel_dct_opp[pv] for pv in pvb_used]
@@ -276,23 +247,16 @@ class EvalB_Acc(EvalB):
                 pvb_score = [pvs_i[0] for pvs_i in pvs]
                 pred_scores_out.append(pvb_score)
 
-                tgt_vb_str = [self.comm.evrel_dct_opp[tgtv] for tgtv in tgtvb]
-                tgt_vbs_out.append(tgt_vb_str)
-
             return {
                 "pred_evrels_ev": pred_vbs_out,
                 "pred_scores_ev": pred_scores_out,
-                "tgt_evrels_ev": tgt_vbs_out,
                 "ann_idx": ann_idx,
             }
 
         out_dct_lst = [
-            get_dct(pred_vbs, pred_scores, tgt_vbs10, ann_idx)
-            for pred_vbs, pred_scores, tgt_vbs10, ann_idx in zip(
-                mdl_ixs_sorted.tolist(),
-                mdl_probs_sorted.tolist(),
-                label_lst10.tolist(),
-                ann_lst.tolist(),
+            get_dct(pred_vbs, pred_scores, ann_idx)
+            for pred_vbs, pred_scores, ann_idx in zip(
+                mdl_ixs_sorted.tolist(), mdl_probs_sorted.tolist(), ann_lst.tolist(),
             )
         ]
         return out_dct_lst

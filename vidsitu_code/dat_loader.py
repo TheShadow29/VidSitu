@@ -51,7 +51,7 @@ class VsituDS(Dataset):
 
         assert self.full_cfg.ds.val_set_type == "lb"
         self.full_val = True
-        self.read_files(self.split_type, is_lb=True)
+        self.read_files(self.split_type)
 
         if self.task_type == "vb":
             self.itemgetter = getattr(self, "vb_only_item_getter")
@@ -80,9 +80,6 @@ class VsituDS(Dataset):
 
         self.comm.vb_id_vocab = read_file_with_assertion(
             self.cfg.vocab_files.verb_id_vocab, reader="pickle"
-        )
-        self.comm.arg_word_vocab = read_file_with_assertion(
-            self.cfg.vocab_files.vb_arg_vocab, reader="pickle"
         )
         self.comm.rob_hf_tok = RobertaTokenizerFast.from_pretrained(
             self.full_cfg.mdl.rob_mdl_name
@@ -592,19 +589,27 @@ def get_data(cfg):
     train_ds = DS(cfg, {}, split_type="train")
     valid_ds = DS(cfg, train_ds.comm, split_type="valid")
     assert cfg.ds.val_set_type == "lb"
-    if cfg.task_type == "vb":
-        test_ds = DS(cfg, train_ds.comm, split_type="test_verb")
-    elif cfg.task_type == "vb_arg":
-        test_ds = DS(cfg, train_ds.comm, split_type="test_srl")
-    elif cfg.task_type == "evrel":
-        test_ds = DS(cfg, train_ds.comm, split_type="test_evrel")
+    if cfg.only_test:
+        if cfg.task_type == "vb":
+            test_ds = DS(cfg, train_ds.comm, split_type="test_verb")
+        elif cfg.task_type == "vb_arg":
+            test_ds = DS(cfg, train_ds.comm, split_type="test_srl")
+        elif cfg.task_type == "evrel":
+            test_ds = DS(cfg, train_ds.comm, split_type="test_evrel")
+        else:
+            raise NotImplementedError
     else:
-        raise NotImplementedError
-
+        test_ds = None
     batch_collator = BC(cfg, train_ds.comm)
     train_dl = get_dataloader(cfg, train_ds, is_train=True, collate_fn=batch_collator)
     valid_dl = get_dataloader(cfg, valid_ds, is_train=False, collate_fn=batch_collator)
-    test_dl = get_dataloader(cfg, test_ds, is_train=False, collate_fn=batch_collator)
+
+    if cfg.only_test:
+        test_dl = get_dataloader(
+            cfg, test_ds, is_train=False, collate_fn=batch_collator
+        )
+    else:
+        test_dl = None
     data = DataWrap(
         path=cfg.misc.tmp_path, train_dl=train_dl, valid_dl=valid_dl, test_dl=test_dl
     )

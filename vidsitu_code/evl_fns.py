@@ -213,8 +213,11 @@ class EvlFn_EvRel:
         mask = {}
         ev_lst = [f"Ev{ix}" for ix in [1, 2, 4, 5]]
 
-        assert len(hypo_dct) == len(self.vseg_lst), "Missing Elements in Prediction"
-        # for pix, pred_one in enumerate(pred_data):
+        if self.cfg.debug_mode:
+            pass
+        else:
+            assert len(hypo_dct) == len(self.vseg_lst), "Missing Elements in Prediction"
+
         for ann_idx in hypo_dct:
             if ann_idx not in hypos:
                 pred_one = hypo_dct[ann_idx]
@@ -340,7 +343,10 @@ class EvlFn_Vb:
         gts = {}
 
         ev_lst = [f"Ev{ix}" for ix in self.evix_lst]
-        assert len(hypo_dct) == len(self.vseg_lst), "Missing Elements in Prediction"
+        if self.cfg.debug_mode:
+            pass
+        else:
+            assert len(hypo_dct) == len(self.vseg_lst), "Missing Elements in Prediction"
         # for pix, pred_one in enumerate(pred_data):
         for ann_idx in hypo_dct:
             if ann_idx not in hypos:
@@ -451,13 +457,15 @@ class EvalFnCap:
         hypo_dct = {}
         for pred in pred_outs:
             ann_idx = pred["ann_idx"]
-            # assert ann_idx not in hypo_dct
             if ann_idx not in hypo_dct:
                 hypo_dct[ann_idx] = pred["vb_output"]
 
-        assert sorted(list(hypo_dct.keys())) == sorted(
-            (list(self.gts_dct.keys()))
-        ), "Missing Elements from Prediction"
+        if self.cfg.debug_mode:
+            pass
+        else:
+            assert sorted(list(hypo_dct.keys())) == sorted(
+                (list(self.gts_dct.keys()))
+            ), "Missing Elements from Prediction"
 
         ann_idx_keys = sorted(list(hypo_dct.keys()))
         gto_dct = {
@@ -479,7 +487,6 @@ class EvalFnCap:
             gt_vseg_assgns = [
                 y for yix, y in enumerate(self.gts_dct[ann_idx]) if yix != ix_gt
             ][:ngt]
-            # assert len(gt_vseg_assgns) > 1
             for ev_i in ev_lst:
                 gt_args = gt_vseg_assgns[0][ev_i]["Args"]
                 vb_id = gt_vseg_assgns[0][ev_i]["VerbID"]
@@ -693,44 +700,6 @@ class EvalFnCap:
 
         return self.get_evals_from_hyp_gts_dcts(hyp_gts_dicts=hyp_gts_dicts)
 
-    def vis_outs(self, pred_file: str, split_type: str = "valid"):
-        pred_outs = read_file_with_assertion(pred_file, reader="pickle")
-        hypo_dct = {}
-        for pred in pred_outs:
-            ann_idx = pred["ann_idx"]
-            # assert ann_idx not in hypo_dct
-            if ann_idx not in hypo_dct:
-                hypo_dct[ann_idx] = pred["vb_output"]
-
-        # assert sorted(list(hypo_dct.keys())) == sorted((list(self.gts_dct.keys())))
-
-        ann_idx_keys = sorted(list(hypo_dct.keys()))
-        aix = 0
-        hypo_str_dct = {}
-        gts_str_dct = {}
-        aix_vb_dct = {}
-        ngt = self.ngt
-        ev_lst = [f"Ev{eix}" for eix in range(1, 6)]
-        for ann_idx in ann_idx_keys:
-            hypo_vb_dct = hypo_dct[ann_idx]
-            gt_vseg_assgns = self.gts_dct[ann_idx][:ngt]
-            # assert len(gt_vseg_assgns) > 1
-            for ev_i in ev_lst:
-                gt_args = gt_vseg_assgns[0][ev_i]["Args"]
-                vb_id = gt_vseg_assgns[0][ev_i]["VerbID"]
-                for gt_ag in gt_args:
-                    gt_lst = [gtva[ev_i]["Args"][gt_ag] for gtva in gt_vseg_assgns]
-                    gts_str_dct[aix] = gt_lst
-                    gt_ag_name = arg_mapper(gt_ag)
-                    if gt_ag_name in hypo_vb_dct[ev_i]:
-                        hypo_lst = [hypo_vb_dct[ev_i][gt_ag_name]]
-                    else:
-                        hypo_lst = [""]
-                    hypo_str_dct[aix] = hypo_lst
-                    aix_vb_dct[aix] = vb_id
-                    aix += 1
-        return
-
 
 def get_fname_key(task_type: str) -> str:
     fname_key_dct = {"vb": "test_verb", "vb_arg": "test_srl", "evrel": "test_evrel"}
@@ -770,8 +739,6 @@ def main(
     if task_type == "vb_arg":
         evl_cap = EvalFnCap(cfg, None, met_keys=["cider", "bleu", "rouge"])
         out_met = evl_cap.eval_cap_mets(pred_file=pred_file, split_type=split_type)
-        # out_mets_print = ["cider", "bleu_1", "bleu_2", "rouge"]
-        # print(
 
         out_results = {k: float(v) for k, v in out_met.items() if "sent" not in k}
 

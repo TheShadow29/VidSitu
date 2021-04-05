@@ -20,7 +20,7 @@ from torch.utils.data import DataLoader
 import mlflow
 from utils.dat_utils import DataWrap
 from yacs.config import CfgNode as CN
-from vsitu_code.extended_config import CfgProcessor
+from vidsitu_code.extended_config import CfgProcessor
 from slowfast.utils.checkpoint import load_checkpoint
 
 
