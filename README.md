@@ -1,4 +1,4 @@
-# VidSitu
+# Visual Semantic Role Labeling for Video Understanding (CVPR21)
 [![LICENSE](https://img.shields.io/badge/license-MIT-green)](https://github.com/TheShadow29/VidSitu/blob/master/LICENSE)
 [![Python](https://img.shields.io/badge/python-3.6-blue)](https://www.python.org/)
 ![PyTorch](https://img.shields.io/badge/pytorch-1.5-yellow)
