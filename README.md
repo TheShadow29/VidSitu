@@ -12,7 +12,6 @@ VidSitu is a large-scale dataset containing diverse 10-second videos from movies
 
 ![](./media/vidsitu-intro.jpg)
 
-# Introduction
 This repository includes:
 
 1. Instructions to install, download and process VidSitu Dataset.
@@ -21,11 +20,11 @@ This repository includes:
 
 # Installation
 
-Please see [INSTALL.md]('./INSTALL.md') for detailed instructions
+Please see [INSTALL.md](./INSTALL.md) for detailed instructions
 
 # Download
 
-Please see [DATA_PREP.md]('./DATA_PREP.md') for detailed instructions on downloading and setting up the dataset.
+Please see [DATA_PREP.md](./data/DATA_PREP.md) for detailed instructions on downloading and setting up the dataset.
 
 # Training
 
