@@ -2,7 +2,7 @@
 [![LICENSE](https://img.shields.io/badge/license-MIT-green)](https://github.com/TheShadow29/VidSitu/blob/master/LICENSE)
 [![Python](https://img.shields.io/badge/python-3.6-blue)](https://www.python.org/)
 ![PyTorch](https://img.shields.io/badge/pytorch-1.5-yellow)
-<!-- [![Arxiv](https://img.shields.io/badge/Arxiv-2003.10606-purple)](https://arxiv.org/abs/2003.10606) -->
+[![Arxiv](https://img.shields.io/badge/Arxiv-2003.10606-purple)](https://arxiv.org/abs/2104.00990)
 
 **Visual Semantic Role Labeling for Video Understanding**<br>
 [Arka Sadhu](https://theshadow29.github.io/), [Tanmay Gupta](http://tanmaygupta.info/), [Mark Yatskar](http://markyatskar.com/), [Ram Nevatia](https://sites.usc.edu/iris-cvlab/professor-ram-nevatia/), [Aniruddha Kembhavi](https://anikem.github.io/)<br>
