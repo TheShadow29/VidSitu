@@ -1,0 +1,63 @@
+[
+    {
+        "ann_idx": 0,
+        "vb_output": {
+            "Ev1": {
+                "vb_id": "drive.01",
+                "Arg1": "man in a white",
+                "AScn": "in a home"
+            },
+            "Ev2": {
+                "vb_id": "drive.01",
+                "Arg1": "man in a white",
+                "AScn": "in a home"
+            },
+            "Ev3": {
+                "vb_id": "drive.01",
+                "Arg0": "woman in a white the woman in a white",
+                "Arg1": "the woman in a white",
+                "AScn": "in a white"
+            },
+            "Ev4": {
+                "vb_id": "look.01",
+                "Arg0": "man in a white the bed",
+                "Arg1": "the bed",
+                "AScn": "in a white"
+            },
+            "Ev5": {
+                "vb_id": "hold.01",
+                "Arg0": "man in a white",
+                "Arg1": "the woman in a white",
+                "AMnr": "the bed",
+                "AScn": "in a white"
+            }
+        }
+    },
+    {
+        "ann_idx": 1,
+        "vb_output": {
+            "Ev1": {
+                "vb_id": "collapse.01",
+                "Arg1": "man in a white"
+            },
+            "Ev2": {
+                "vb_id": "agonize.01",
+                "Arg1": "man in a white"
+            },
+            "Ev3": {
+                "vb_id": "wave.01",
+                "Arg1": "man in a white"
+            },
+            "Ev4": {
+                "vb_id": "approach.01",
+                "Arg1": "man in a white",
+                "AMnr": "",
+                "AScn": "in a white"
+            },
+            "Ev5": {
+                "vb_id": "walk.01",
+                "Arg0": "man in a white"
+            }
+        }
+    }
+]

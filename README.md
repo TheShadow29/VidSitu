@@ -113,7 +113,7 @@ Logs are also stored using [MLFlow](https://www.mlflow.org/docs/latest/tracking.
             pred_scores_ev: List[List[float]]
         ```
 
-    See examples under `docs/example_eval_outputs`
+    See examples under [docs](docs/)
 
 
 # Citation
