@@ -1,0 +1,121 @@
+ds:
+  vsitu:
+    name: 'vid_situ'
+    video_tdir: './data/mclips/videos/'
+    video_frms_tdir: './data/vsitu_frames/'
+    video_trimmed_tdir: './data/vsitu_trimmed_videos/'
+
+    split_files_lb:
+      train: './data/vidsitu_data/split_files/vseg_split_train_lb.json'
+      valid: './data/vidsitu_data/split_files/vseg_split_valid_lb.json'
+      test_verb: './data/vidsitu_data/split_files/vseg_split_testvb_lb.json'
+      test_srl: './data/vidsitu_data/split_files/vseg_split_testsrl_lb.json'
+      test_evrel: './data/vidsitu_data/split_files/vseg_split_testevrel_lb.json'
+    vinfo_files_lb:
+      train: './data/vidsitu_data/vinfo_files/vinfo_train_lb.json'
+      valid: './data/vidsitu_data/vinfo_files/vinfo_valid_lb.json'
+      test_verb: './data/vidsitu_data/vinfo_files/vinfo_testvb_lb.json'
+      test_srl: './data/vidsitu_data/vinfo_files/vinfo_testsrl_lb.json'
+      test_evrel: './data/vidsitu_data/vinfo_files/vinfo_testevrel_lb.json'
+    vsitu_ann_files_lb:
+      train: './data/vidsitu_data/vseg_ann_files/vsann_train_lb.json'
+      valid: './data/vidsitu_data/vseg_ann_files/vsann_valid_lb.json'
+      test_verb: './data/vidsitu_data/vseg_ann_files/vsann_testvb_lb.json'
+      test_srl: './data/vidsitu_data/vseg_ann_files/vsann_testsrl_lb.json'
+      test_evrel: './data/vidsitu_data/vseg_ann_files/vsann_testevrel_lb.json'
+
+    vocab_files:
+      # verb_name_vocab: './data/vsitu_meta/vsitu_vocab/verb_name_vocab.pkl'
+      verb_id_vocab: './data/vsitu_vocab/verb_id_vocab.pkl'
+      # vb_arg_vocab: './data/vsitu_meta/vsitu_vocab/vb_arg_vocab.pkl'
+      # gpt2_vb_arg_vocab: './data/vsitu_meta/vsitu_vocab/bpe_gpt2_vb_arg_vocab.pkl'
+      new_gpt2_vb_arg_vocab: './data/vsitu_vocab/bpe_with_seps_vb_arg_vocab.pkl'
+      # new_gpt2_vb_arg_evrel_vocab: './data/vsitu_meta/vsitu_vocab/bpe_with_seps_evrel_vb_arg_vocab.pkl'
+    vsitu_frm_feats: './data/vsitu_vid_feats/'
+    vsit_frm_feats_dir: './data/vsitu_vid_feats/i3d_nln_kpret_ep10_best_recall'
+    arg_names:
+      vb: "Vb"
+      ag0: "Arg0"
+      ag1: "Arg1"
+      ag2: "Arg2"
+      ag3: "Arg3"
+      ag4: "Arg4"
+      ascn: "AScn"
+      aloc: "ALoc"
+      aprp: "APrp"
+      agol: "AGol"
+      adir: "ADir"
+      amnr: "AMnr"
+    num_ev: 5
+    evrel_trimmed: true
+  trn_shuffle: true
+  val_set_type: 'lb' # should be'lb'
+
+
+task_type: 'vb' # one of ["vb", "vb_arg", "evrel"]
+expm:
+  exp_name: 'vsitu_fin'
+  run_id: ''
+  st_time: ''
+mdl:
+  sf_mdl_name: 'slow_fast_nl_r50_8x8'
+  sf_mdl_cfg_file: './configs/vsitu_mdl_cfgs/Kinetics_c2_SLOWFAST_8x8_R50.yaml'
+  load_sf_pretrained: false
+  tx_dec_mdl_name: 'transformer'
+  tx_dec_cfg_file: './configs/vsiut_tx_cfgs/transformer.yaml'
+  gpt2_mdl_name: 'gpt2-medium'
+  rob_mdl_name: 'roberta-base'
+  mdl_name: 'gpt2_only'
+  use_old_tok: false
+  tx_enc_type: 'old'
+  tx_dec_type: 'txdec'
+
+misc:
+  tmp_path: './tmp'
+
+gen:
+  beam_size: 1
+  max_len_a: 0
+  max_len_b: 200
+  min_len: 0
+  normalize_scores: True
+  len_penalty: 1
+  unk_penalty: 0
+  temperature: 1.0
+  no_repeat_ngram_size: 0
+
+train:
+  lr: 1e-4
+  epochs: 10
+  bs: 16
+  nw: 4
+  bsv: 16
+  nwv: 4
+  ns: 4
+  resume: false
+  resume_path: ""
+  load_opt: true
+  load_normally: true
+  strict_load: true
+  use_reduce_lr_plateau: false
+  verbose: false
+  save_mdl_epochs: false
+  sfbase_pret_path: ''
+  freeze_sfbase: false
+
+log:
+  deb_it: 2
+
+debug_mode: False
+local_rank: 0
+do_dist: False
+do_dp: False
+num_gpus: 1
+only_val: false
+only_test: false
+test_dl_name: 'test'
+val_dl_name: 'valid'
+run_final_val: true
+overfit_batch: false
+DIST_BACKEND: "nccl"
+SHARD_ID: 0

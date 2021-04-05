@@ -1,0 +1,18 @@
+[submodule "fairseq"]
+	path = fairseq
+	url = https://github.com/TheShadow29/fairseq.git
+	branch = fseq_master_13Oct20
+[submodule "coco-caption"]
+	path = coco-caption
+	url = https://github.com/TheShadow29/coco-caption.git
+	branch = master
+[submodule "SlowFast"]
+	path = SlowFast
+	url = https://github.com/facebookresearch/SlowFast.git
+[submodule "cocoapi"]
+	path = cocoapi
+	url = https://github.com/cocodataset/cocoapi.git
+[submodule "coval"]
+	path = coval
+	url = https://github.com/TheShadow29/coval.git
+	branch = coval_29Oct20

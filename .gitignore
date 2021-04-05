@@ -1,0 +1,6 @@
+temp_dir/
+tmp/
+*__pycache__/
+data/*
+!data/*.md
+mlruns/
