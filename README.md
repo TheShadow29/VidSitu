@@ -46,7 +46,7 @@ Please see [DATA_PREP.md](./data/DATA_PREP.md) for detailed instructions on down
 
 - All model choices are available under `code/mdl_selector.py`
 
-See [EXPTS.md]('./EXPTS.md) for detailed usage and reproducing numbers in the paper.
+See [EXPTS.md](EXPTS.md) for detailed usage and reproducing numbers in the paper.
 
 # Logging
 
