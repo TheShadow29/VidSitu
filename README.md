@@ -1,10 +1,10 @@
-# VidSitu
+# Visual Semantic Role Labeling for Video Understanding (CVPR21)
 [![LICENSE](https://img.shields.io/badge/license-MIT-green)](https://github.com/TheShadow29/VidSitu/blob/master/LICENSE)
 [![Python](https://img.shields.io/badge/python-3.6-blue)](https://www.python.org/)
 ![PyTorch](https://img.shields.io/badge/pytorch-1.5-yellow)
 [![Arxiv](https://img.shields.io/badge/Arxiv-2104.00990-purple)](https://arxiv.org/abs/2104.00990)
 
-**Visual Semantic Role Labeling for Video Understanding**<br>
+**[Visual Semantic Role Labeling for Video Understanding](https://arxiv.org/abs/2104.00990)**<br>
 [Arka Sadhu](https://theshadow29.github.io/), [Tanmay Gupta](http://tanmaygupta.info/), [Mark Yatskar](http://markyatskar.com/), [Ram Nevatia](https://sites.usc.edu/iris-cvlab/professor-ram-nevatia/), [Aniruddha Kembhavi](https://anikem.github.io/)<br>
 [CVPR 2021](http://cvpr2021.thecvf.com/)
 
@@ -46,7 +46,7 @@ Please see [DATA_PREP.md](./data/DATA_PREP.md) for detailed instructions on down
 
 - All model choices are available under `code/mdl_selector.py`
 
-See [EXPTS.md]('./EXPTS.md) for detailed usage and reproducing numbers in the paper.
+See [EXPTS.md](EXPTS.md) for detailed usage and reproducing numbers in the paper.
 
 # Logging
 
@@ -58,7 +58,7 @@ Logs are stored inside `tmp/` directory. When you run the code with $exp_name th
 
 Logs are also stored using [MLFlow](https://www.mlflow.org/docs/latest/tracking.html). These can be uploaded to other experiment trackers such as [neptune.ai](https://neptune.ai/), [wandb](https://wandb.ai/site) for better visualization of results.
 
-# Evaluation
+# Evaluation (Locally)
 
 1. Evaluation scripts are available for the three tasks under `code/evl_fns.py`. The same file is used for leaderboard purposes.
     If you are using this codebase, the predictions are stored under `tmp/predictions/{expt_id}/valid_0.pkl`.
@@ -114,6 +114,17 @@ Logs are also stored using [MLFlow](https://www.mlflow.org/docs/latest/tracking.
         ```
 
     See examples under [docs](docs/)
+    
+# Leaderboard (Evaluation on Test Sets)
+
+We maintain three separate leaderboards for each of the three tasks. The leaderboard will accept submissions from April 7th, 2021.
+The output format remains the same as local evaluation. 
+
+Here are the leaderboard links:
+
++ [Verb Prediction](https://leaderboard.allenai.org/vidsitu-verbs/submissions/public)
++ [Semantic Role Prediction](https://leaderboard.allenai.org/vidsitu-semantic-roles/submissions/public)
++ [Event Relation Prediction](https://leaderboard.allenai.org/vidsitu-event-relations/submissions/public)
 
 
 # Citation
