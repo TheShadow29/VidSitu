@@ -2,6 +2,12 @@
 
 There are three main steps in setting up the dataset. See [./data/README.md]('./data/README.md') for annotation file structure.
 
+NOTE: youtube-dl needs to be updated with the following command before downloading the videos using 
+
+```
+pip install youtube-dl --upgrade
+```
+
 1. Download the Annotation and Split Files
     ```
     export ROOT=$(PWD)
