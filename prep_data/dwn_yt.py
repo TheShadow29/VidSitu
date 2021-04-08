@@ -9,6 +9,9 @@ from yacs.config import CfgNode as CN
 import subprocess
 import os
 import fire
+import logging
+
+logger = logging.getLogger(__name__)
 
 
 class YTDown:
@@ -61,8 +64,14 @@ class YTDown:
         processes = set()
         max_process = self.cfg.max_process
 
-        for yt_id in tqdm(self.combined_split[:10]):
-            cmd = f"ffmpeg -ss {yt_id['start']} -i $(youtube-dl -f 22 --get-url https://www.youtube.com/watch?v={yt_id['vid_id']}) -to 10 {video_dir / yt_id['vid_seg_id']}.mp4"
+        for yt_id in tqdm(self.combined_split):
+            vid_seg_id = yt_id["vid_seg_id"]
+            out_file = Path(f"{video_dir / vid_seg_id}.mp4")
+            if out_file.exists():
+                logger.info(f"Skipping Video {vid_seg_id}")
+                continue
+
+            cmd = f"ffmpeg -ss {yt_id['start']} -i $(youtube-dl -f 22/best --get-url https://www.youtube.com/watch?v={yt_id['vid_id']}) -to 10 {out_file}"
             processes.add(subprocess.Popen(cmd, shell=True))
             if len(processes) >= max_process:
                 os.wait()
@@ -107,8 +116,8 @@ def main(task_type: str):
         {
             "video_trimmed_dir": "./data/video_trimmed_dir",
             "video_frm_dir": "./data/vsitu_video_frames_dir",
-            "max_process": 10,
-            "split_dir": "./data/vidsitu_data/vidsitu_s3_upload/split_files",
+            "max_process": 30,
+            "split_dir": "./data/vidsitu_data/split_files",
         }
     )
 
