@@ -82,10 +82,20 @@ There are three main steps in setting up the dataset. See [./data/README.md]('./
     python prep_data/dwn_yt.py --task_type='extract_frames'
     ```
 
-1.  Alternatively, you can skip the video download process and directly use the pre-extracted features:
+1.  Alternatively, you can skip the video download process and directly use the pre-extracted features from [google drive link](https://drive.google.com/file/d/1rBrRmew7Soul51MjLN6F55oTEzUfzyXv/view)
+
+    To download directly on the remote, you can use the following convenience function
 
     ```
-    cd $ROOT
-    export FEATURE_ZIP_LINK=.... # to be filled after upload
-    wget -c $FEATURE_ZIP_LINK
+    function gdrive_download () {
+        CONFIRM=$(wget --quiet --save-cookies /tmp/cookies.txt --keep-session-cookies --no-check-certificate "https://docs.google.com/uc?export=download&id=$1" -O- | sed -rn 's/.*confirm=([0-9A-Za-z_]+).*/\1\n/p')
+        wget --load-cookies /tmp/cookies.txt "https://docs.google.com/uc?export=download&confirm=$CONFIRM&id=$1" -O $2
+        rm -rf /tmp/cookies.txt
+    }
+
+    cd $ROOT/data
+    export FEATURE_ZIP_DRIVE_ID="1rBrRmew7Soul51MjLN6F55oTEzUfzyXv" # to be filled after upload
+    gdrive_download "1rBrRmew7Soul51MjLN6F55oTEzUfzyXv" vsitu_vidfeats_drive.zip
+    unzip vsitu_vidfeats_drive.zip -d vsitu_vid_feats
+    rm vsitu_vidfeats_drive.zip
     ```
