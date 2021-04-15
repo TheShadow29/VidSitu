@@ -18,13 +18,14 @@ This repository includes:
 2. Code to run all experiments provided in the paper along with log files.
 3. Instructions to submit results to the Leaderboard.
 
+# Download
+
+Please see [DATA_PREP.md](./data/DATA_PREP.md) for detailed instructions on downloading and setting up the dataset.
+
 # Installation
 
 Please see [INSTALL.md](./INSTALL.md) for detailed instructions
 
-# Download
-
-Please see [DATA_PREP.md](./data/DATA_PREP.md) for detailed instructions on downloading and setting up the dataset.
 
 # Training
 
