@@ -46,10 +46,21 @@ There are three directories:
         - `imdb_id`: Imdb id for the movie
         - `year_rel`: Year when the movie was released.
 
+    + For Validation file, the following keys are additionally present:
+        - `vb_to_use`: The verbs used to gather Semantic Roles and Event Relations.
+        - `vb_lst`: A Dictionary with keys Ev1-Ev5 and values as a list of 10-verbs
+        - `vbid_lst`: Same as above, but instead of verb names, uses the verb ids.
+
 + `vseg_ann_files/`: Containing Video Segment Annotations (SRL + Event Relations) for Train and Validation.
     + Contains SRL and Event Relations information
-    + Each `*.json` file is a List[Dict]
-    + Each Dict has the keys: ['Ev1', 'Ev2', 'Ev3', 'Ev4', 'Ev5']
-    +
+    + Each `*.json` file is a List[Dict[Dict]]
+    + Each Dict has the keys: ['Ev1', 'Ev2', 'Ev3', 'Ev4', 'Ev5']. The corresponding value is also a Dict with the following keys:
+        + `vid_uid`: unique identifier for a video
+        + `vid_seg_int`: Identifier for the 10-second movie clip of the form `v_{video_id}_seg_{start_second}_{end_second}`
+        + `EvRel`: Event Relation with respect to Event 3. NOTE: Ev3 doesn't have EvRel key
+        + `Arg_List`: A Dictionary with Argument names for the verb with their respective positions.
+        + `Args`: The relevant Semantic Roles for the given Verb. This is a Dictionary with the same keys in Arg_List, but the values are strings representing the roles.
+        + `Verb`: Verb name
+        + `VerbID`: The Verb ID.
 
 Please refer to https://github.com/TheShadow29/VidSitu/blob/main/data/DATA_PREP.md for instructions on setting up the dataset.
