@@ -1,9 +1,9 @@
 ds:
   vsitu:
     name: 'vid_situ'
-    video_tdir: './data/mclips/videos/'
-    video_frms_tdir: './data/vsitu_frames/'
-    video_trimmed_tdir: './data/vsitu_trimmed_videos/'
+    video_frm_tdir: './data/vsitu_frames/'
+    video_trimmed_dir: './data/vsitu_video_trimmed_dir'
+    split_files_dir: './data/vidsitu_data/split_files'
 
     split_files_lb:
       train: './data/vidsitu_data/split_files/vseg_split_train_lb.json'

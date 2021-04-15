@@ -259,39 +259,6 @@ def pad_words_new(
         max_len=max_len,
     )
     return sent_out_enc, attn_mask
-    # curr_len = len(sent_enc)
-    # if isinstance(sent_enc, list):
-    #     sent_enc = torch.tensor(sent_enc, dtype=torch.long)
-    # sent_out_enc = sent_enc.new_full((max_len,), pad_index, dtype=torch.long)
-
-    # if append_eos:
-    #     if curr_len >= max_len:
-    #         sent_out_enc[:max_len] = sent_enc[:max_len]
-    #         sent_out_enc[max_len - 1] = eos_index
-    #         out_len = max_len
-    #     else:
-    #         if pad_side == "right":
-    #             sent_out_enc[:curr_len] = sent_enc
-    #         else:
-    #             sent_out_enc[-curr_len:] = sent_enc
-    #         sent_out_enc[curr_len] = eos_index
-    #         out_len = curr_len + 1
-    # else:
-    #     if curr_len >= max_len:
-    #         sent_out_enc[:max_len] = sent_enc[:max_len]
-    #         out_len = max_len
-    #     else:
-    #         if pad_side == "right":
-    #             sent_out_enc[:curr_len] = sent_enc
-    #         else:
-    #             sent_out_enc[-curr_len:] = sent_enc
-    #         out_len = curr_len
-    # if pad_side == "right":
-    #     attn_mask = [1] * out_len + [0] * (max_len - out_len)
-    # else:
-    #     attn_mask = [0] * (max_len - out_len) + [1] * out_len
-    # assert len(attn_mask) == max_len
-    # return sent_out_enc, attn_mask
 
 
 def add_prev_tokens(

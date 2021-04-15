@@ -1,0 +1,4 @@
+video_trimmed_dir: "./data/vsitu_video_trimmed_dir"
+video_frm_tdir: "./data/vsitu_video_frames_dir"
+max_process: 30
+split_dir: "./data/vidsitu_data/split_files"

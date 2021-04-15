@@ -42,4 +42,4 @@ There are three directories:
         - `year_rel`: Year when the movie was released.
 + `vseg_ann_files/`: Containing Video Segment Annotations (SRL + Event Relations) for Train and Validation
 
-Please refer to https://github.com/TheShadow29/VidSitu/DATA_README.md for instructions on setting up the dataset.
+Please refer to https://github.com/TheShadow29/VidSitu/blob/main/data/DATA_PREP.md for instructions on setting up the dataset.

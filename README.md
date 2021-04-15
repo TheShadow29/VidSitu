@@ -36,7 +36,7 @@ Please see [DATA_PREP.md](./data/DATA_PREP.md) for detailed instructions on down
     For instance, if you want to change the `beam_size` under `gen` which in the YML file looks like
     ```
     gen:
-    beam_size: 1
+        beam_size: 1
     ```
     you can pass `--gen.beam_size=5`
 
@@ -114,11 +114,11 @@ Logs are also stored using [MLFlow](https://www.mlflow.org/docs/latest/tracking.
         ```
 
     See examples under [docs](docs/)
-    
+
 # Leaderboard (Evaluation on Test Sets)
 
 We maintain three separate leaderboards for each of the three tasks. The leaderboard will accept submissions from April 7th, 2021.
-The output format remains the same as local evaluation. 
+The output format remains the same as local evaluation.
 
 Here are the leaderboard links:
 
