@@ -34,8 +34,6 @@ There are three main steps in setting up the dataset. See [./data/README.md]('./
             └── vsann_valid_lb.json
     ```
 
-
-
 1.  Download the Videos from youtube. It should take around 4-5 hours depending on network speed and is around 50GB in size.
     In case any video is not available, please contact Arka (asadhu@usc.edu).
 
