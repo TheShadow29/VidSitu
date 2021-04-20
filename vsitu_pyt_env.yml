@@ -1,4 +1,4 @@
-name: railgun
+name: vsitu_pyt
 channels:
   - pytorch
   - plotly
@@ -115,7 +115,6 @@ dependencies:
   - lxml=4.5.2=py37hefd8a0e_0
   - lz4-c=1.9.2=he6710b0_1
   - markupsafe=1.1.1=py37h14c3975_1
-  - matplotlib-base=3.3.1=py37h817c723_0
   - mccabe=0.6.1=py_1
   - mistune=0.8.4=py37h14c3975_1001
   - mkl=2020.2=256
@@ -237,7 +236,6 @@ dependencies:
     - azure-storage-blob==12.5.0
     - bert-score==0.3.5
     - black==19.10b0
-    - blis==0.4.1
     - boto3==1.14.17
     - botocore==1.17.17
     - cachetools==4.1.0
@@ -245,13 +243,14 @@ dependencies:
     - cython==0.29.20
     - databricks-cli==0.12.1
     - dataclasses==0.6
+    - detectron2==0.3+cu102
     - docker==4.3.1
     - docutils==0.15.2
     - editdistance==0.5.3
     - filelock==3.0.12
     - fire==0.3.1
     - flask-cors==3.0.8
-    - fvcore==0.1.1.post20200623
+    - fvcore==0.1.3.post20210227
     - google-auth==1.18.0
     - google-auth-oauthlib==0.4.1
     - gorilla==0.3.0
@@ -260,6 +259,7 @@ dependencies:
     - hydra-core==1.0.3
     - idna==2.9
     - importlib-resources==3.0.0
+    - iopath==0.1.4
     - isodate==0.6.0
     - isort==4.3.21
     - jmespath==0.10.0
@@ -289,7 +289,7 @@ dependencies:
     - psutil==5.7.0
     - pyasn1==0.4.8
     - pyasn1-modules==0.2.8
-    - pycocotools==2.0.1
+    - pycocotools==2.0.2
     - pydot==1.4.1
     - python-editor==1.0.4
     - qgrid==1.3.1
@@ -327,5 +327,5 @@ dependencies:
     - wheel==0.35.1
     - wrapt==1.12.1
     - yacs==0.1.8
-    - youtube-dl==2020.9.20
-prefix: /home/arkas/miniconda3/envs/railgun
+    - youtube-dl==2021.4.7
+prefix: /home/arkas/miniconda3/envs/vsitu_pyt
