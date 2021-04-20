@@ -1,23 +1,23 @@
 # VidSitu Annotation Files:
 
 File Structure:
-    ```
-    vidsitu_annotations
-    ├── split_files
-    │   ├── vseg_split_testevrel_lb.json
-    │   ├── vseg_split_testsrl_lb.json
-    │   ├── vseg_split_testvb_lb.json
-    │   ├── vseg_split_train_lb.json
-    │   └── vseg_split_valid_lb.json
-    ├── vinfo_files
-    │   ├── vinfo_train_lb.json
-    │   └── vinfo_valid_lb.json
-    └── vseg_ann_files
-        ├── vsann_testevrel_noann_lb.json
-        ├── vsann_testsrl_noann_lb.json
-        ├── vsann_train_lb.json
-        └── vsann_valid_lb.json
-    ```
+```
+vidsitu_annotations
+├── split_files
+│   ├── vseg_split_testevrel_lb.json
+│   ├── vseg_split_testsrl_lb.json
+│   ├── vseg_split_testvb_lb.json
+│   ├── vseg_split_train_lb.json
+│   └── vseg_split_valid_lb.json
+├── vinfo_files
+│   ├── vinfo_train_lb.json
+│   └── vinfo_valid_lb.json
+└── vseg_ann_files
+    ├── vsann_testevrel_noann_lb.json
+    ├── vsann_testsrl_noann_lb.json
+    ├── vsann_train_lb.json
+    └── vsann_valid_lb.json
+```
 
 
 
