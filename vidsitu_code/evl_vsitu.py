@@ -174,7 +174,6 @@ class EvalB_Gen(EvalB):
         def conv_seq_to_srl(inp_seq: str, ann_idx):
             inp_tok_lst = inp_seq.split(" ")
             if "." not in inp_tok_lst[0]:
-                print("Pain in Val", ann_idx)
                 return {}
             vb = inp_tok_lst[0]
             ix = 1
