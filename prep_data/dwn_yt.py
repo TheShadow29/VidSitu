@@ -131,13 +131,14 @@ class YTDown:
         in_dir_files = [y for y in in_dir.iterdir() if y.suffix == ".mp4"]
 
         for in_file in tqdm(in_dir_files):
-            out_vid_dir = out_dir / f"{in_file.stem}"
+            vid_seg_id = in_file.stem.replace('_trimmed', '')
+            out_vid_dir = out_dir / f"{vid_seg_id}"
             if out_vid_dir.exists():
                 continue
             else:
                 out_vid_dir.mkdir()
 
-            out_name = str(out_vid_dir / f"{in_file.stem}_%06d.jpg")
+            out_name = str(out_vid_dir / f"{vid_seg_id}_%06d.jpg")
             cmd = f"ffmpeg -i {in_file} -r 30 -q:v 1 {out_name}"
             processes.add(subprocess.Popen(cmd, shell=True))
             if len(processes) >= max_process:
@@ -145,7 +146,7 @@ class YTDown:
                 processes.difference_update(
                     [p for p in processes if p.poll() is not None]
                 )
-
+                
         return
 
 
