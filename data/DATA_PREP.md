@@ -97,3 +97,19 @@ There are three main steps in setting up the dataset. See [./data/README.md]('./
     unzip vsitu_vidfeats_drive.zip -d vsitu_vid_feats
     rm vsitu_vidfeats_drive.zip
     ```
+
+1. Download the vocabulary files from here: https://drive.google.com/file/d/1TAreioObLGKqU7M9wmnuaXh4b5s_2YdK/view?usp=sharing and place them under `data/vsitu_vocab`
+    ```
+    function gdrive_download () {
+        CONFIRM=$(wget --quiet --save-cookies /tmp/cookies.txt --keep-session-cookies --no-check-certificate "https://docs.google.com/uc?export=download&id=$1" -O- | sed -rn 's/.*confirm=([0-9A-Za-z_]+).*/\1\n/p')
+        wget --load-cookies /tmp/cookies.txt "https://docs.google.com/uc?export=download&confirm=$CONFIRM&id=$1" -O $2
+        rm -rf /tmp/cookies.txt
+    }
+
+    cd $ROOT/data
+    export VOCAB_ZIP_DRIVE_ID="1TAreioObLGKqU7M9wmnuaXh4b5s_2YdK" # to be filled after upload
+    gdrive_download $VOCAB_ZIP_DRIVE_ID vsitu_vocab.zip
+    unzip vsitu_vocab.zip -d vsitu_vocab.zip
+    rm vsitu_vocab.zip
+    ```
+
