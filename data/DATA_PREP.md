@@ -34,7 +34,7 @@ There are three main steps in setting up the dataset. See [./data/README.md]('./
             └── vsann_valid_lb.json
     ```
 
-1.  Download the Videos from youtube. It should take around 4-5 hours depending on network speed and is around 50GB in size.
+1.  Download the Videos from youtube. It should take around ~8-10 hours depending on network speed and is around 50GB in size.
     In case any video is not available, please contact Arka (asadhu@usc.edu).
 
     1. Install required dependencies:
@@ -65,12 +65,26 @@ There are three main steps in setting up the dataset. See [./data/README.md]('./
         conda install ffmpeg
         ```
 
-    1. Download the videos
+    1. Download the videos: (Following works for ~28k / 29k videos)
         ```
         cd $ROOT
         export PYTHONPATH=$(pwd)
-        python prep_data/dwn_yt.py --task_type='dwn_vids'
+        python prep_data/dwn_yt.py --task_type='dwn_vids' --max_processes=30
         ```
+
+        There are around 1k Age-restricted videos. To download these you need to add a cookies.txt file, which you can give using `--cookies_file=/path/to/cookies.txt`. So the command would be:
+
+        ```
+        cd $ROOT
+        export PYTHONPATH=$(pwd)
+        python prep_data/dwn_yt.py --task_type='dwn_vids' --max_processes=30 --cookies_file=/path/to/cookies.txt
+        ```
+
+
+        To generate cookies.txt, follow the steps below:
+        + Download Get Cookies.txt extension [Chrome](https://chrome.google.com/webstore/detail/get-cookiestxt/bgaddhkoddajcdgocldbbfleckgcbcid)
+        + Login to youtube.com, and use the extension to export the cookies in txt form.
+
 
 1.  Extract the frames from the video.
 
@@ -112,4 +126,3 @@ There are three main steps in setting up the dataset. See [./data/README.md]('./
     unzip vsitu_vocab.zip -d vsitu_vocab.zip
     rm vsitu_vocab.zip
     ```
-

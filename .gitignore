@@ -4,3 +4,4 @@ tmp/
 data/*
 !data/*.md
 mlruns/
+*cookies*
