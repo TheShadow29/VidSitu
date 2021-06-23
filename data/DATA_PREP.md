@@ -123,6 +123,6 @@ There are three main steps in setting up the dataset. See [./data/README.md]('./
     cd $ROOT/data
     export VOCAB_ZIP_DRIVE_ID="1TAreioObLGKqU7M9wmnuaXh4b5s_2YdK" # to be filled after upload
     gdrive_download $VOCAB_ZIP_DRIVE_ID vsitu_vocab.zip
-    unzip vsitu_vocab.zip -d vsitu_vocab.zip
+    unzip vsitu_vocab.zip -d vsitu_vocab
     rm vsitu_vocab.zip
     ```
