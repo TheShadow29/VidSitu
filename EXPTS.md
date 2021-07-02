@@ -4,6 +4,8 @@ This document presents how to run all experiments provided in the paper and repr
 
 Pre-trained models are uploaded on google drive.
 
+To run a particular model see `cmd` under log. 
+
 # Verb Prediction
 
 |    | Name        | Model Tag             | Model                                                                       | Log                                                                       |
