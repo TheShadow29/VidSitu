@@ -14,6 +14,7 @@ import torch
 from tqdm import tqdm
 import numpy as np
 from utils.trn_utils import move_to
+from slowfast.utils.checkpoint import load_checkpoint
 
 
 class VsituDS_All(VsituDS):
@@ -116,7 +117,7 @@ def rem_mdl(k):
     return k1
 
 
-def main(mdl_resume_path: str, mdl_name_used: str, **kwargs):
+def main(mdl_resume_path: str, mdl_name_used: str, is_cu: bool = False, **kwargs):
     CFP = CfgProcessor("./configs/vsitu_cfg.yml")
     cfg = CFP.get_vsitu_default_cfg()
     num_gpus = 1
@@ -140,6 +141,27 @@ def main(mdl_resume_path: str, mdl_name_used: str, **kwargs):
     get_default_net = mdl_loss_eval["mdl"]
 
     # for split_type in ["train", "valid", "test"]:
+    ds = VsituDS_All(cfg, {}, split_type="train")
+    comm = ds.comm
+    mdl = get_default_net(cfg=cfg, comm=comm)
+    if not is_cu:
+        mdl.load_state_dict(
+            {
+                rem_mdl(k): v
+                for k, v in torch.load(mdl_resume_path)["model_state_dict"].items()
+            }
+        )
+    else:
+        print("Using Caffe2 checkpoint")
+        load_checkpoint(
+            mdl_resume_path,
+            model=mdl.sf_mdl,
+            data_parallel=False,
+            convert_from_caffe2=True,
+        )
+
+    mdl.to(torch.device("cuda"))
+
     for split_type in ["valid", "train", "test_verb", "test_srl", "test_evrel"]:
         if comm is None:
             comm = {}
@@ -147,14 +169,7 @@ def main(mdl_resume_path: str, mdl_name_used: str, **kwargs):
         comm = ds.comm
         batch_collator = BatchCollator(cfg, ds.comm)
         dl = get_dataloader(cfg, ds, is_train=False, collate_fn=batch_collator)
-        mdl = get_default_net(cfg=cfg, comm=comm)
-        mdl.load_state_dict(
-            {
-                rem_mdl(k): v
-                for k, v in torch.load(mdl_resume_path)["model_state_dict"].items()
-            }
-        )
-        mdl.to(torch.device("cuda"))
+
         mdl.eval()
         feat_ext.set_mdl_dl(mdl, dl, mdl_name=mdl_name_used, split_name=split_type)
         feat_ext.forward_all()
