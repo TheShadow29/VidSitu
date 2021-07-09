@@ -126,3 +126,27 @@ There are three main steps in setting up the dataset. See [./data/README.md]('./
     unzip vsitu_vocab.zip -d vsitu_vocab
     rm vsitu_vocab.zip
     ```
+    
+1. Feature Extration: After training a verb model, one might be interested in re-extracting the features on their end. We provide [vidsitu_code/feat_extractor.py](vidsitu_code/feat_extractor.py). 
+
+    To run a particular saved model, use the following command:
+    ```
+    export PYTHONPATH=$(pwd)
+    python vidsitu_code/feat_extractor.py ----mdl_resume_path='/path/to/saved_model' --mdl_name_used='some_name_used_as_dir_for_feats' --ds.vsitu.vsu_frm_feats='/top/level/featuredir' --mdl.mdl_name='sf_base' --mdl.sf_mdl_name='i3d_r50_nl_8x8' --is_cu=False
+    ```
+    
+    Note that `sf_mdl_name` needs to match the name in `extended_config.py`. If you want to use a checkpoint from Slowfast repository where some of the models are saved in caffe2, use `--is_cu=True` in the argument.
+    
+    Thus, for using I3D_NL model trained on vidsitu verbs, the command could be:
+    ```
+    export PYTHONPATH=$(pwd)
+    CUDA_VISIBLE_DEVICES=5 python vidsitu_code/feat_extractor.py --mdl_resume_path='./weights/i3d_nln_r50_vsitu.pth' --mdl_name_used='i3d_recheck' --ds.vsitu.vsitu_frm_feats='./data/vsitu_features' --mdl.mdl_name='sf_base' --mdl.sf_mdl_name='i3d_r50_nl_8x8' --is_cu=False
+    ```
+    
+    To use I3D_NL model from Slowfast, it would be:
+
+    ```
+    export PYTHONPATH=$(pwd)
+    CUDA_VISIBLE_DEVICES=5 python vidsitu_code/feat_extractor.py --mdl_resume_path='./weights/I3D_NLN_8x8_R50.pkl' --mdl_name_used='i3d_recheck_kpret' --ds.vsitu.vsitu_frm_feats='./data/vsitu_features' --mdl.mdl_name='sf_base' --mdl.sf_mdl_name='i3d_r50_nl_8x8' --is_cu=True    
+    ```
+
