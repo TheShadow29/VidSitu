@@ -21,7 +21,7 @@ logging.basicConfig(
     level=logging.DEBUG,
 )
 import signal
-
+import shutil
 
 logger = logging.getLogger(__name__)
 
@@ -81,6 +81,8 @@ def process_wrapper(
         for p in processes:
             os.killpg(os.getpgid(p.pid), signal.SIGTERM)
     finally:
+        for p in processes:
+            os.killpg(os.getpgid(p.pid), signal.SIGTERM)
         print("Loop DONE")
     return
 
@@ -145,30 +147,60 @@ class YTDown:
         def get_out_file(vid_seg_id):
             return Path(f"{video_dir / vid_seg_id}.mp4")
 
-        def get_generator(remaining_ids) -> Generator:
+        def get_generator(remaining_ids, format=None) -> Generator:
             for _, yt_id in remaining_ids:
                 out_file = get_out_file(yt_id["vid_seg_id"])
+                if format is None:
+                    format = "22/best"
                 cmd = (
-                    f"ffmpeg -ss {yt_id['start']} -i $(youtube-dl {ytdl_cookies_str} -f 22/best"
+                    f"ffmpeg -ss {yt_id['start']} -i $(yt-dlp {ytdl_cookies_str} -f {format}"
                     + f" --get-url https://www.youtube.com/watch\?v\={yt_id['vid_id']}) -to 10 {out_file}"
                 )
                 yield {"cmd": cmd}
 
         retry_count = self.cfg.retry_count
         orig_retry_count = retry_count
-        while retry_count > 0:
+
+        def check_exists(fpath, strict_check: bool = False):
+            if not fpath.exists():
+                return False
+            if strict_check:
+                # FILE SHOULD BE > 50K
+                # If Images have already been extracted, they should be > 290
+                if fpath.stat().st_size < 50000:
+                    fpath.unlink()
+                    return False
+                fdir = Path(self.cfg.video_frm_tdir) / f"{fpath.stem}"
+                if fdir.exists():
+                    nfiles = len([i for i in fdir.iterdir()])
+                    if nfiles < 290:
+                        fpath.unlink()
+                        return False
+
+                return True
+            return True
+
+        while retry_count >= 0:
 
             remaining_vid_seg_ids = [
                 x
                 for x in self.combined_split
-                if not get_out_file(x[1]["vid_seg_id"]).exists()
+                if not check_exists(
+                    get_out_file(x[1]["vid_seg_id"]), strict_check=self.cfg.hard_check
+                )
             ]
 
             if len(remaining_vid_seg_ids) == 0:
                 break
 
             print("Retry Count", orig_retry_count - retry_count)
-            remaining_vid_gen = get_generator(remaining_ids=remaining_vid_seg_ids)
+            format = None
+            # ONLY Try at last retry
+            if retry_count == 0:
+                format = "webm"
+            remaining_vid_gen = get_generator(
+                remaining_ids=remaining_vid_seg_ids, format=format
+            )
 
             process_wrapper(
                 iter_gen=remaining_vid_gen,
@@ -217,10 +249,24 @@ class YTDown:
                 cmd = f"ffmpeg -i {in_file} -r 30 -q:v 1 {out_name}"
                 yield {"cmd": cmd}
 
+        def check_exist(dir_path, strict=False):
+            if not dir_path.exists():
+                return False
+            if strict:
+                nfiles = len([i for i in dir_path.iterdir()])
+                if nfiles < 290:
+                    shutil.rmtree(dir_path)
+                    return False
+                return True
+            return True
+
         remaining_in_dir_files = [
             y
             for y in in_dir_files
-            if not get_out_vid_dir(y.stem.replace("_trimmed", "")).exists()
+            if not check_exist(
+                get_out_vid_dir(y.stem.replace("_trimmed", "")),
+                strict=self.cfg.hard_check,
+            )
         ]
 
         file_gen = get_in_file_gen(in_dir_files=remaining_in_dir_files)
@@ -265,10 +311,13 @@ if __name__ == "__main__":
         default=10,
     )
     parser.add_argument("--cookies_file", help="Cookies for YTDL", default="")
+
+    parser.add_argument("--hard_check", action="store_true", help="check strict")
+
     parser.add_argument(
         "--retry_count",
         type=int,
-        help="How many times to retry youtube-download",
+        help="How many times to retry youtube-download. NOTE: Should be >= 1, recommended 3",
         default=3,
     )
     parser.add_argument(
