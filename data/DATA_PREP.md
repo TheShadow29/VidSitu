@@ -41,12 +41,12 @@ There are three main steps in setting up the dataset. See [./data/README.md]('./
 
         - tqdm
         - yacs
-        - youtube-dl
+        - yt-dlp
 
-        NOTE: youtube-dl needs to be updated with the following command before downloading the videos using
+        NOTE: yt-dlp needs to be updated with the following command before downloading the videos using
 
         ```
-        pip install youtube-dl --upgrade
+        pip install yt-dlp
         ```
 
         We also provide a basic conda environment:
@@ -55,13 +55,15 @@ There are three main steps in setting up the dataset. See [./data/README.md]('./
         conda env create -f barebones_data_setup.yml --prefix $MINICONDA_ROOT/envs/vsitu_data_env
         conda activate vsitu_data_env
         ```
+        
+        NOTE: You may have to install `yt-dlp` separately since the original environment used `youtub-dl` 
 
         If you are using your own conda environment, you need to run:
         ```
         conda activate $ENV_NAME
         conda install tqdm
         pip install yacs
-        pip install youtube-dl --upgrade
+        pip install yt-dlp --upgrade
         conda install ffmpeg
         ```
 
